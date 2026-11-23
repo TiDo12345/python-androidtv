@@ -23,6 +23,7 @@ Changes compared to ``androidtv`` 0.0.75:
 * queue ADB commands instead of dropping them while the connection is busy, e.g. during a screencap (async: upstream pull request `#374 <https://github.com/JeffLIrion/python-androidtv/pull/374>`_ by Komzpa; sync: same change)
 * discard ``dumpsys`` stderr so that "Broken pipe" does not corrupt the parsed state (upstream pull request `#376 <https://github.com/JeffLIrion/python-androidtv/pull/376>`_ by JordiRubio93, issue `#373 <https://github.com/JeffLIrion/python-androidtv/issues/373>`_)
 * retry the power check up to 20 times, with a short pause, when ``dumpsys power`` fails (upstream pull request `#367 <https://github.com/JeffLIrion/python-androidtv/pull/367>`_ by matejdro)
+* check whether the screen is on with ``dumpsys deviceidle get screen`` first, then the previous checks (upstream pull request `#369 <https://github.com/JeffLIrion/python-androidtv/pull/369>`_ by tgrushka; checked on a Fire OS 9 TV)
 * device properties are no longer discarded when the manufacturer or product ID is empty (same problem as upstream pull request `#359 <https://github.com/JeffLIrion/python-androidtv/pull/359>`_ by clansty)
 * no Python 2 compatibility code and no direct ``async_timeout`` dependency any more; requires ``adb-shell`` 0.4.4+
 * hardened CI (read-only token, GitHub Actions pinned to commit SHAs, weekly run), Dependabot, CodeQL and secret scanning
@@ -31,7 +32,7 @@ Changes compared to ``androidtv`` 0.0.75:
 Installation
 ------------
 
-There is no PyPI release of this fork.  The version carries a local label (currently ``0.0.75+tido.3``), so it still satisfies a requirement of ``androidtv==0.0.75``, such as the one in Home Assistant.
+There is no PyPI release of this fork.  The version carries a local label (currently ``0.0.75+tido.4``), so it still satisfies a requirement of ``androidtv==0.0.75``, such as the one in Home Assistant.
 
 Install a release (recommended, a fixed version) with the wheel URL from the `releases page <https://github.com/TiDo12345/python-androidtv/releases>`_:
 
