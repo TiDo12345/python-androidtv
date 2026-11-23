@@ -3,10 +3,7 @@ import logging
 import sys
 import unittest
 
-try:
-    from unittest.mock import patch
-except ImportError:
-    from mock import patch
+from unittest.mock import patch
 
 sys.path.insert(0, "..")
 
@@ -403,7 +400,6 @@ class FireTVDevice(ADBDevice):
 # =========================================================================== #
 
 
-@unittest.skipIf(sys.version_info.major == 2, "Test requires Python 3")
 class TestAndroidTVPythonImplementation(unittest.TestCase):
     """Test the androidtv media player for an Android TV device."""
 
@@ -475,7 +471,6 @@ class TestAndroidTVPythonImplementation(unittest.TestCase):
             self.assertIsNotNone(self.aftv.state)
 
 
-@unittest.skipIf(sys.version_info.major == 2, "Test requires Python 3")
 class TestAndroidTVServerImplementation(unittest.TestCase):
     """Test the androidtv media player for an Android TV device."""
 
@@ -535,7 +530,6 @@ class TestAndroidTVServerImplementation(unittest.TestCase):
             self.assertIsNotNone(self.aftv.state)
 
 
-@unittest.skipIf(sys.version_info.major == 2, "Test requires Python 3")
 class TestFireTVPythonImplementation(TestAndroidTVPythonImplementation):
     """Test the androidtv media player for a Fire TV device."""
 
@@ -550,7 +544,6 @@ class TestFireTVPythonImplementation(TestAndroidTVPythonImplementation):
             self.aftv = FireTVDevice(aftv, "Fake Fire TV", {}, True, None, None)
 
 
-@unittest.skipIf(sys.version_info.major == 2, "Test requires Python 3")
 class TestFireTVServerImplementation(TestAndroidTVServerImplementation):
     """Test the androidtv media player for a Fire TV device."""
 
@@ -561,7 +554,6 @@ class TestFireTVServerImplementation(TestAndroidTVServerImplementation):
             self.aftv = FireTVDevice(aftv, "Fake Fire TV", {}, True, None, None)
 
 
-@unittest.skipIf(sys.version_info.major == 2, "Test requires Python 3")
 class TestADBCommandAndFileSync(unittest.TestCase):
     """Test ADB and FileSync services."""
 

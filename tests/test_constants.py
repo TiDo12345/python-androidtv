@@ -303,7 +303,6 @@ class TestConstants(unittest.TestCase):
             for call in re.findall(r"\bdumpsys\b[^|)]*", value):
                 self.assertIn("2>/dev/null", call, "{}: {}".format(name, call))
 
-    @unittest.skipIf(sys.version_info.major == 2, "Test requires Python 3")
     def test_no_underscores(self):
         """Test that 'ANDROID_TV', 'BASE_TV', and 'FIRE_TV' do not appear in the code base."""
         cwd = os.path.join(os.path.dirname(__file__), "..")

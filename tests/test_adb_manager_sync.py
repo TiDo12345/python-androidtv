@@ -2,10 +2,7 @@ from contextlib import contextmanager
 import sys
 import unittest
 
-try:
-    from unittest.mock import patch
-except ImportError:
-    from mock import patch
+from unittest.mock import patch
 
 sys.path.insert(0, "..")
 
@@ -14,9 +11,6 @@ from androidtv.adb_manager.adb_manager_sync import _acquire, ADBPythonSync, ADBS
 from androidtv.constants import DEFAULT_TRANSFER_TIMEOUT_S
 from androidtv.exceptions import LockNotAcquiredException
 from . import patchers
-
-if sys.version_info[0] == 2:
-    FileNotFoundError = IOError
 
 
 class Read(object):

@@ -7,17 +7,8 @@
 
 """
 
+from enum import IntEnum, unique
 import re
-import sys
-
-if sys.version_info[0] == 3 and sys.version_info[1] >= 5:
-    from enum import IntEnum, unique
-else:  # pragma: no cover
-    IntEnum = object
-
-    def unique(cls):
-        """A class decorator that does nothing."""
-        return cls
 
 
 @unique

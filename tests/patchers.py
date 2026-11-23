@@ -1,12 +1,6 @@
 """Define patches used for androidtv tests."""
 
-try:
-    # Python3
-    from unittest.mock import patch
-except ImportError:
-    # Python2
-    from mock import patch
-
+from unittest.mock import patch
 
 KEY_PYTHON = "python"
 KEY_SERVER = "server"

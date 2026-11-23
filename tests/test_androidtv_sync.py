@@ -1,13 +1,7 @@
 import sys
 import unittest
 
-try:
-    # Python3
-    from unittest.mock import patch
-except ImportError:
-    # Python2
-    from mock import patch
-
+from unittest.mock import patch
 
 sys.path.insert(0, "..")
 
