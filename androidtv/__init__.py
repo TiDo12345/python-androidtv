@@ -9,7 +9,7 @@ from .basetv.basetv_sync import BaseTVSync
 from .constants import DEFAULT_AUTH_TIMEOUT_S, DEFAULT_TRANSPORT_TIMEOUT_S
 from .firetv.firetv_sync import FireTVSync
 
-__version__ = "0.0.75+tido.2"
+__version__ = "0.0.75+tido.3"
 
 
 def setup(
