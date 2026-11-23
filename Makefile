@@ -208,6 +208,7 @@ htmlcov: coverage  ## Produce a coverage report
 .PHONY: docs
 docs: venv  ## Build the documentation
 	rm -rf $(DOCS_DIR)/build
+	$(PIP) install -r $(DOCS_DIR)/requirements.txt
 	@cd $(DOCS_DIR) && $(SPHINX_APIDOC) -f -e -o source/ $(CURDIR)/$(PACKAGE_DIR)/
 	@cd $(DOCS_DIR) && make html && make html
 
