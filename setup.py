@@ -2,7 +2,7 @@
 
 from setuptools import setup
 
-with open("README.rst") as f:
+with open("README.rst", encoding="utf-8") as f:
     readme = f.read()
 
 setup(
@@ -19,10 +19,13 @@ setup(
     install_requires=["adb-shell>=0.4.0", "pure-python-adb>=0.3.0.dev0"],
     extras_require={"async": ["aiofiles>=0.4.0", "async_timeout>=3.0.0"], "usb": ["adb-shell[usb]>=0.4.0"]},
     classifiers=[
-        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
     ],
-    test_suite="tests",
+    python_requires=">=3.11",
 )

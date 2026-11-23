@@ -1,5 +1,5 @@
 # Standard requirements
-black==23.3.0
+black==26.10.1  # pinned so that formatting does not drift between CI runs
 coverage
 coveralls
 flake8
