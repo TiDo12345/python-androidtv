@@ -232,13 +232,13 @@ class TestConstants(unittest.TestCase):
         # CMD_SCREEN_ON
         self.assertCommand(
             constants.CMD_SCREEN_ON,
-            r"(dumpsys power 2>/dev/null | grep 'Display Power' | grep -q 'state=ON' || dumpsys power 2>/dev/null | grep -q 'mScreenOn=true' || dumpsys display 2>/dev/null | grep -q 'mScreenState=ON')",
+            r"(dumpsys deviceidle get screen 2>/dev/null | grep -x true || dumpsys power 2>/dev/null | grep 'Display Power' | grep 'state=ON' || dumpsys power 2>/dev/null | grep 'mScreenOn=true' || dumpsys display 2>/dev/null | grep 'mScreenState=ON') > /dev/null",
         )
 
         # CMD_SCREEN_ON_AWAKE_WAKE_LOCK_SIZE
         self.assertCommand(
             constants.CMD_SCREEN_ON_AWAKE_WAKE_LOCK_SIZE,
-            r"(dumpsys power 2>/dev/null | grep 'Display Power' | grep -q 'state=ON' || dumpsys power 2>/dev/null | grep -q 'mScreenOn=true' || dumpsys display 2>/dev/null | grep -q 'mScreenState=ON') && echo -e '1\c' || echo -e '0\c' && dumpsys power 2>/dev/null | grep mWakefulness | grep -q Awake && echo -e '1\c' || echo -e '0\c' && dumpsys power 2>/dev/null | grep Locks | grep 'size='",
+            r"(dumpsys deviceidle get screen 2>/dev/null | grep -x true || dumpsys power 2>/dev/null | grep 'Display Power' | grep 'state=ON' || dumpsys power 2>/dev/null | grep 'mScreenOn=true' || dumpsys display 2>/dev/null | grep 'mScreenState=ON') > /dev/null && echo -e '1\c' || echo -e '0\c' && dumpsys power 2>/dev/null | grep mWakefulness | grep -q Awake && echo -e '1\c' || echo -e '0\c' && dumpsys power 2>/dev/null | grep Locks | grep 'size='",
         )
 
         # CMD_SERIALNO
@@ -250,25 +250,25 @@ class TestConstants(unittest.TestCase):
         # CMD_TURN_OFF_ANDROIDTV
         self.assertCommand(
             constants.CMD_TURN_OFF_ANDROIDTV,
-            r"(dumpsys power 2>/dev/null | grep 'Display Power' | grep -q 'state=ON' || dumpsys power 2>/dev/null | grep -q 'mScreenOn=true' || dumpsys display 2>/dev/null | grep -q 'mScreenState=ON') && input keyevent 26",
+            r"(dumpsys deviceidle get screen 2>/dev/null | grep -x true || dumpsys power 2>/dev/null | grep 'Display Power' | grep 'state=ON' || dumpsys power 2>/dev/null | grep 'mScreenOn=true' || dumpsys display 2>/dev/null | grep 'mScreenState=ON') > /dev/null && input keyevent 26",
         )
 
         # CMD_TURN_OFF_FIRETV
         self.assertCommand(
             constants.CMD_TURN_OFF_FIRETV,
-            r"(dumpsys power 2>/dev/null | grep 'Display Power' | grep -q 'state=ON' || dumpsys power 2>/dev/null | grep -q 'mScreenOn=true' || dumpsys display 2>/dev/null | grep -q 'mScreenState=ON') && input keyevent 223",
+            r"(dumpsys deviceidle get screen 2>/dev/null | grep -x true || dumpsys power 2>/dev/null | grep 'Display Power' | grep 'state=ON' || dumpsys power 2>/dev/null | grep 'mScreenOn=true' || dumpsys display 2>/dev/null | grep 'mScreenState=ON') > /dev/null && input keyevent 223",
         )
 
         # CMD_TURN_ON_ANDROIDTV
         self.assertCommand(
             constants.CMD_TURN_ON_ANDROIDTV,
-            r"(dumpsys power 2>/dev/null | grep 'Display Power' | grep -q 'state=ON' || dumpsys power 2>/dev/null | grep -q 'mScreenOn=true' || dumpsys display 2>/dev/null | grep -q 'mScreenState=ON') || input keyevent 26",
+            r"(dumpsys deviceidle get screen 2>/dev/null | grep -x true || dumpsys power 2>/dev/null | grep 'Display Power' | grep 'state=ON' || dumpsys power 2>/dev/null | grep 'mScreenOn=true' || dumpsys display 2>/dev/null | grep 'mScreenState=ON') > /dev/null || input keyevent 26",
         )
 
         # CMD_TURN_ON_FIRETV
         self.assertCommand(
             constants.CMD_TURN_ON_FIRETV,
-            r"(dumpsys power 2>/dev/null | grep 'Display Power' | grep -q 'state=ON' || dumpsys power 2>/dev/null | grep -q 'mScreenOn=true' || dumpsys display 2>/dev/null | grep -q 'mScreenState=ON') || (input keyevent 26 && input keyevent 3)",
+            r"(dumpsys deviceidle get screen 2>/dev/null | grep -x true || dumpsys power 2>/dev/null | grep 'Display Power' | grep 'state=ON' || dumpsys power 2>/dev/null | grep 'mScreenOn=true' || dumpsys display 2>/dev/null | grep 'mScreenState=ON') > /dev/null || (input keyevent 26 && input keyevent 3)",
         )
 
         # CMD_VERSION

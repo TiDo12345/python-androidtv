@@ -219,7 +219,7 @@ CMD_RUNNING_APPS = "ps -A | grep u0_a"
 CMD_INSTALLED_APPS = "pm list packages"
 
 #: Determine if the device is on
-CMD_SCREEN_ON = "(dumpsys power 2>/dev/null | grep 'Display Power' | grep -q 'state=ON' || dumpsys power 2>/dev/null | grep -q 'mScreenOn=true' || dumpsys display 2>/dev/null | grep -q 'mScreenState=ON')"
+CMD_SCREEN_ON = "(dumpsys deviceidle get screen 2>/dev/null | grep -x true || dumpsys power 2>/dev/null | grep 'Display Power' | grep 'state=ON' || dumpsys power 2>/dev/null | grep 'mScreenOn=true' || dumpsys display 2>/dev/null | grep 'mScreenState=ON') > /dev/null"
 
 #: Get the "STREAM_MUSIC" block from ``dumpsys audio``
 CMD_STREAM_MUSIC = r"dumpsys audio 2>/dev/null | grep '\- STREAM_MUSIC:' -A 11"
