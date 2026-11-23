@@ -1,6 +1,4 @@
-"""Helpers for processing the output of the ``screencap -p`` command.
-
-"""
+"""Helpers for processing the output of the ``screencap -p`` command."""
 
 #: The first bytes of the PNG file signature
 PNG_SIGNATURE_START = b"\x89PNG"
