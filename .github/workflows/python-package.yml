@@ -8,6 +8,17 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  # Run weekly as well, so that changes in the runner images or in the dependencies are noticed early
+  schedule:
+    - cron: '17 4 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   ENV_GITHUB_ACTIONS: 'ENV_GITHUB_ACTIONS'
@@ -16,12 +27,16 @@ jobs:
   build:
 
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     strategy:
+      fail-fast: false
       matrix:
         python-version: ['3.11', '3.12', '3.13', '3.14']
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
@@ -34,8 +49,13 @@ jobs:
       run: |
         make lint
     - name: Test with pytest
+      run: |
+        make coverage
+    - name: Upload coverage to Coveralls
+      # An outage of the coverage service must not fail the build
+      continue-on-error: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         COVERALLS_SERVICE_NAME: github
       run: |
-        make coverage && coveralls
+        coveralls
