@@ -2,6 +2,7 @@ import inspect
 import os
 import re
 import shlex
+import shutil
 import subprocess
 import sys
 import unittest
@@ -11,6 +12,9 @@ sys.path.insert(0, "..")
 from androidtv import constants
 
 from .generate_test_constants import get_cmds
+
+#: POSIX shell used to run the shell snippets in the tests
+SH = shutil.which("sh")
 
 
 class TestConstants(unittest.TestCase):
@@ -24,10 +28,13 @@ class TestConstants(unittest.TestCase):
 
     @staticmethod
     def _exec(command):
-        process = os.popen(command)
-        output = process.read().strip()
-        process.close()
-        return output
+        """Run ``command`` with a POSIX shell, as on the device (skip the test if there is none, e.g. on Windows)."""
+        if SH is None:
+            raise unittest.SkipTest("This test needs a POSIX shell (sh)")
+        # pass the command on stdin, so that no command line quoting (e.g., on Windows) gets in the way
+        return subprocess.run(
+            [SH], input=command, capture_output=True, text=True, encoding="utf-8", check=False
+        ).stdout.strip()
 
     @staticmethod
     def _parse_current_app(dumpsys_output):
