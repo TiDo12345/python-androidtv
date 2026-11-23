@@ -9,7 +9,7 @@ RSTRIP='"*'
 LSTRIP='*"'
 
 # get the package name
-PACKAGE_LINE=$(grep "name=" $DIR/../setup.py || echo '')
+PACKAGE_LINE=$(grep -m 1 "^name = " $DIR/../pyproject.toml || echo '')
 PACKAGE_TEMP=${PACKAGE_LINE%$RSTRIP}
 PACKAGE=${PACKAGE_TEMP##$LSTRIP}
 

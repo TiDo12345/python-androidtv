@@ -13,6 +13,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
+import re
 import sys
 sys.path.insert(0, os.path.abspath('../..'))
 
@@ -25,10 +26,11 @@ project = 'androidtv'
 copyright = '2020, Jeff Irion'
 author = 'Jeff Irion'
 
+# The version is only defined in ``androidtv/__init__.py``
+with open(os.path.join(os.path.dirname(__file__), '..', '..', 'androidtv', '__init__.py'), encoding='utf-8') as f:
+    release = re.search(r'^__version__ = "(.+)"$', f.read(), re.MULTILINE).group(1)
 # The short X.Y version
-version = '0.0.75+tido.4'
-# The full version, including alpha/beta/rc tags
-release = '0.0.75+tido.4'
+version = release
 
 
 # -- General configuration ---------------------------------------------------
@@ -65,7 +67,7 @@ master_doc = 'index'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

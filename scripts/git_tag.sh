@@ -11,5 +11,5 @@ VERSION=$($DIR/get_version.sh)
 echo "Creating tag v$VERSION"
 
 cd $DIR/..
-git tag v$VERSION -m "v$VERSION"
-git push --tags
+git tag -a "v$VERSION" -m "v$VERSION"
+echo "Push it with: git push <remote> refs/tags/v$VERSION (GitHub Actions then builds the release)"

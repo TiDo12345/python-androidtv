@@ -33,7 +33,7 @@ TEST_SYNC_FILES = $(shell cd $(TEST_DIR) && ls test*.py | grep -v async)
 
 # Target prerequisites that may or may not exist
 VENV_REQUIREMENTS_TXT := $(wildcard venv_requirements.txt)
-SETUP_PY := $(wildcard setup.py)
+PYPROJECT := $(wildcard pyproject.toml)
 
 
 # A prerequisite for forcing targets to run
@@ -90,8 +90,8 @@ endif
 	touch venv/.requirements
 
 # Install the package in the virtual environment
-venv/.setup: venv/.bin $(SETUP_PY)
-ifneq ("$(wildcard setup.py)", "")
+venv/.setup: venv/.bin $(PYPROJECT)
+ifneq ("$(wildcard pyproject.toml)", "")
 	$(PIP) install .
 endif
 	touch venv/.setup
@@ -213,11 +213,11 @@ docs: venv  ## Build the documentation
 
 
 .PHONY: release
-release:  ## Make a release and upload it to pypi
+release:  ## Check the package build and tag the current version (pushing the tag lets GitHub Actions build the release)
 	rm -rf dist
+	$(PYTHON) -m build
+	$(TWINE) check --strict dist/*
 	scripts/git_tag.sh
-	$(PYTHON) setup.py sdist bdist_wheel
-	$(TWINE) upload dist/*
 
 
 .PHONY: all

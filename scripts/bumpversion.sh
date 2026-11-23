@@ -27,9 +27,4 @@ echo "Bumping the version from $VERSION to $1"
 # __init__.py
 sed -i "s|__version__ = \"$VERSION\"|__version__ = \"$1\"|g" $DIR/../$PACKAGE/__init__.py
 
-# setup.py
-sed -i "s|version=\"$VERSION\",|version=\"$1\",|g" $DIR/../setup.py
-
-# conf.py
-sed -i "s|version = '$VERSION'|version = '$1'|g" $DIR/../docs/source/conf.py
-sed -i "s|release = '$VERSION'|release = '$1'|g" $DIR/../docs/source/conf.py
+# pyproject.toml and docs/source/conf.py read the version from __init__.py
