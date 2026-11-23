@@ -20,7 +20,7 @@ Changes compared to ``androidtv`` 0.0.75:
 * Python 3.11+ only; CI runs on Python 3.11 to 3.15 (based on upstream pull requests `#361 <https://github.com/JeffLIrion/python-androidtv/pull/361>`_ and `#364 <https://github.com/JeffLIrion/python-androidtv/pull/364>`_ to `#366 <https://github.com/JeffLIrion/python-androidtv/pull/366>`_ by CloCkWeRX)
 * screencap on Fire OS: strip the text line printed before the PNG data (issue `#377 <https://github.com/JeffLIrion/python-androidtv/issues/377>`_)
 * longer timeout for file transfers (``push`` / ``pull``)
-* queue ADB commands instead of dropping them while the connection is busy, e.g. during a screencap (async: upstream pull request `#374 <https://github.com/JeffLIrion/python-androidtv/pull/374>`_ by Komzpa; sync: same change)
+* queue ADB commands instead of dropping them while the connection is busy, e.g. during a screencap (async: upstream pull request `#374 <https://github.com/JeffLIrion/python-androidtv/pull/374>`_ by Komzpa; sync: same change); a command waits at most 60 s, and is not sent if the connection was closed while it waited
 * discard ``dumpsys`` stderr so that "Broken pipe" does not corrupt the parsed state (upstream pull request `#376 <https://github.com/JeffLIrion/python-androidtv/pull/376>`_ by JordiRubio93, issue `#373 <https://github.com/JeffLIrion/python-androidtv/issues/373>`_)
 * retry the power check up to 20 times, with a short pause, when ``dumpsys power`` fails (upstream pull request `#367 <https://github.com/JeffLIrion/python-androidtv/pull/367>`_ by matejdro)
 * check whether the screen is on with ``dumpsys deviceidle get screen`` first, then the previous checks (upstream pull request `#369 <https://github.com/JeffLIrion/python-androidtv/pull/369>`_ by tgrushka; checked on a Fire OS 9 TV)
@@ -32,7 +32,7 @@ Changes compared to ``androidtv`` 0.0.75:
 Installation
 ------------
 
-There is no PyPI release of this fork.  The version carries a local label (currently ``0.0.75+tido.5``), so it still satisfies a requirement of ``androidtv==0.0.75``, such as the one in Home Assistant.
+There is no PyPI release of this fork.  The version carries a local label (currently ``0.0.75+tido.6``), so it still satisfies a requirement of ``androidtv==0.0.75``, such as the one in Home Assistant.
 
 Install a release (recommended, a fixed version) with the wheel URL from the `releases page <https://github.com/TiDo12345/python-androidtv/releases>`_:
 
