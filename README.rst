@@ -3,7 +3,7 @@ python-androidtv
 
 .. note::
 
-   **This is a fork** of `JeffLIrion/python-androidtv <https://github.com/JeffLIrion/python-androidtv>`_. It exists only to submit fixes to the original project as pull requests, currently `#378 <https://github.com/JeffLIrion/python-androidtv/pull/378>`_ (screencap on Fire OS, issue `#377 <https://github.com/JeffLIrion/python-androidtv/issues/377>`_). There are no separate releases; please use the original package (``pip install androidtv``) and report issues in the original repository.
+   **This is a fork** of `JeffLIrion/python-androidtv <https://github.com/JeffLIrion/python-androidtv>`_. It exists only to submit fixes to the original project as pull requests, currently `#378 <https://github.com/JeffLIrion/python-androidtv/pull/378>`_ (screencap on Fire OS, issue `#377 <https://github.com/JeffLIrion/python-androidtv/issues/377>`_) and `#379 <https://github.com/JeffLIrion/python-androidtv/pull/379>`_ (longer timeout for file transfers). There are no separate releases; please use the original package (``pip install androidtv``) and report issues in the original repository.
 
    Many thanks to Jeff Irion and all contributors for this package and for keeping it open to community pull requests. The code remains under the original MIT License (see ``LICENSE``).
 
