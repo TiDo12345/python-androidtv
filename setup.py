@@ -7,7 +7,7 @@ with open("README.rst", encoding="utf-8") as f:
 
 setup(
     name="androidtv",
-    version="0.0.75",
+    version="0.0.75+tido.1",
     description="Communicate with an Android TV or Fire TV device via ADB over a network.",
     long_description=readme,
     keywords=["adb", "android", "androidtv", "firetv"],

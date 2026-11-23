@@ -13,7 +13,7 @@ python-androidtv
    * queue async ADB commands instead of dropping them while the connection is busy (upstream pull request `#374 <https://github.com/JeffLIrion/python-androidtv/pull/374>`_ by Komzpa)
    * discard ``dumpsys`` stderr so that "Broken pipe" does not corrupt the parsed state (upstream pull request `#376 <https://github.com/JeffLIrion/python-androidtv/pull/376>`_ by JordiRubio93, issue `#373 <https://github.com/JeffLIrion/python-androidtv/issues/373>`_)
 
-   There is no PyPI release of this fork. Install it from GitHub with ``pip install "androidtv[async] @ git+https://github.com/TiDo12345/python-androidtv"`` and report problems with these changes in `this repository <https://github.com/TiDo12345/python-androidtv/issues>`_.
+   There is no PyPI release of this fork. Its version carries a local label (``0.0.75+tido.1``), so it still satisfies a requirement of ``androidtv==0.0.75``. Install it from GitHub with ``pip install "androidtv[async] @ git+https://github.com/TiDo12345/python-androidtv"`` and report problems with these changes in `this repository <https://github.com/TiDo12345/python-androidtv/issues>`_.
 
    Many thanks to Jeff Irion and all contributors for this package, and to the authors of the pull requests above. The code remains under the original MIT License (see ``LICENSE``). The sections below are from the original README.
 
