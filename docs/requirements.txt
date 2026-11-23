@@ -1,3 +1,4 @@
-# Requirements for building the documentation (make docs); Sphinx 9.2 needs Python 3.13+
+# Requirements for building the documentation (make docs, Read the Docs); Sphinx 9.2 needs Python 3.13+.
+# The package itself is installed from this repository (see .readthedocs.yml).
 sphinx==9.2.0
 sphinx-rtd-theme==3.1.0
