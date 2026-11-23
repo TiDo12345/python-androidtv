@@ -3,12 +3,22 @@ python-androidtv
 
 .. note::
 
-   **This is a fork** of `JeffLIrion/python-androidtv <https://github.com/JeffLIrion/python-androidtv>`_. It exists only to submit fixes to the original project as pull requests, currently `#378 <https://github.com/JeffLIrion/python-androidtv/pull/378>`_ (screencap on Fire OS, issue `#377 <https://github.com/JeffLIrion/python-androidtv/issues/377>`_) and `#379 <https://github.com/JeffLIrion/python-androidtv/pull/379>`_ (longer timeout for file transfers), each on its own branch. The ``master`` branch of this fork additionally includes the not yet merged upstream pull request `#374 <https://github.com/JeffLIrion/python-androidtv/pull/374>`_ by Komzpa (queue async ADB commands instead of dropping them). There are no separate releases; please use the original package (``pip install androidtv``) and report issues in the original repository.
+   **This is a maintained fork** of `JeffLIrion/python-androidtv <https://github.com/JeffLIrion/python-androidtv>`_. The original project only accepts community pull requests and has not had a release since 0.0.75, so fixes that are needed in practice (Fire TV / Fire OS devices controlled from Home Assistant) are collected here.
 
-   Many thanks to Jeff Irion and all contributors for this package and for keeping it open to community pull requests. The code remains under the original MIT License (see ``LICENSE``).
+   Changes compared to ``androidtv`` 0.0.75:
 
-.. image:: https://travis-ci.com/JeffLIrion/python-androidtv.svg?branch=master
-   :target: https://travis-ci.com/JeffLIrion/python-androidtv
+   * Python 3.11+ only; CI runs on Python 3.11 to 3.14 (based on upstream pull requests `#361 <https://github.com/JeffLIrion/python-androidtv/pull/361>`_ and `#364 <https://github.com/JeffLIrion/python-androidtv/pull/364>`_ to `#366 <https://github.com/JeffLIrion/python-androidtv/pull/366>`_ by CloCkWeRX)
+   * screencap on Fire OS: strip the text line printed before the PNG data (issue `#377 <https://github.com/JeffLIrion/python-androidtv/issues/377>`_)
+   * longer timeout for file transfers (``push`` / ``pull``)
+   * queue async ADB commands instead of dropping them while the connection is busy (upstream pull request `#374 <https://github.com/JeffLIrion/python-androidtv/pull/374>`_ by Komzpa)
+   * discard ``dumpsys`` stderr so that "Broken pipe" does not corrupt the parsed state (upstream pull request `#376 <https://github.com/JeffLIrion/python-androidtv/pull/376>`_ by JordiRubio93, issue `#373 <https://github.com/JeffLIrion/python-androidtv/issues/373>`_)
+
+   There is no PyPI release of this fork. Install it from GitHub with ``pip install "androidtv[async] @ git+https://github.com/TiDo12345/python-androidtv"`` and report problems with these changes in `this repository <https://github.com/TiDo12345/python-androidtv/issues>`_.
+
+   Many thanks to Jeff Irion and all contributors for this package, and to the authors of the pull requests above. The code remains under the original MIT License (see ``LICENSE``). The sections below are from the original README.
+
+.. image:: https://github.com/TiDo12345/python-androidtv/actions/workflows/python-package.yml/badge.svg?branch=master
+   :target: https://github.com/TiDo12345/python-androidtv/actions/workflows/python-package.yml
    :alt: Build Status
 .. image:: https://coveralls.io/repos/github/JeffLIrion/python-androidtv/badge.svg
    :target: https://coveralls.io/github/JeffLIrion/python-androidtv
@@ -43,7 +53,7 @@ Installation
    pip install androidtv
 
 
-To utilize the async version of this code, you must install into a Python 3.7+ environment via:
+To utilize the async version of this code, install the ``async`` extra:
 
 .. code-block::
 
