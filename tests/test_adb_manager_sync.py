@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 import sys
+import threading
 import unittest
 
 from unittest.mock import patch
@@ -94,6 +95,33 @@ class TestADBPythonSync(unittest.TestCase):
 
             with _acquire(self.adb._adb_lock) as acquired:
                 self.assertTrue(acquired)
+
+    def test_adb_shell_waits_for_busy_connection(self):
+        """A command must wait (not be dropped) while another command holds the lock for more than 3 s."""
+        with patchers.patch_connect(True)[self.PATCH_KEY], patchers.patch_shell("TEST")[self.PATCH_KEY]:
+            self.assertTrue(self.adb.connect())
+            lock = threading.Lock()
+            lock.acquire()
+            releaser = threading.Timer(3.1, lock.release)
+            with patch.object(self.adb, "_adb_lock", lock):
+                releaser.start()
+                try:
+                    self.assertEqual(self.adb.shell("TEST"), "TEST")
+                finally:
+                    releaser.join()
+                self.assertFalse(lock.locked())
+
+    def test_acquire_with_timeout(self):
+        """An explicit acquisition timeout still raises ``LockNotAcquiredException``."""
+        lock = threading.Lock()
+        lock.acquire()
+        try:
+            with self.assertRaises(LockNotAcquiredException):
+                with _acquire(lock, 0.1):
+                    pass
+        finally:
+            lock.release()
+        self.assertFalse(lock.locked())
 
     def test_connect_success(self):
         """Test when the connect attempt is successful."""

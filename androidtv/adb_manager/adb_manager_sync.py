@@ -16,7 +16,6 @@ from ppadb.client import Client
 from ..constants import (
     DEFAULT_ADB_TIMEOUT_S,
     DEFAULT_AUTH_TIMEOUT_S,
-    DEFAULT_LOCK_TIMEOUT_S,
     DEFAULT_TRANSFER_TIMEOUT_S,
     DEFAULT_TRANSPORT_TIMEOUT_S,
 )
@@ -25,18 +24,18 @@ from .screencap import process_screencap_output
 
 _LOGGER = logging.getLogger(__name__)
 
-#: Keyword arguments for acquiring the ADB threading lock
-LOCK_KWARGS = {"timeout": DEFAULT_LOCK_TIMEOUT_S}
-
 
 @contextmanager
-def _acquire(lock):
-    """Handle acquisition and release of a ``threading.Lock`` object with ``LOCK_KWARGS`` keyword arguments.
+def _acquire(lock, timeout=None):
+    """Queue access to a ``threading.Lock``, with an optional acquisition timeout.
 
     Parameters
     ----------
     lock : threading.Lock
         The lock that we will try to acquire
+    timeout : float, None
+        Optional acquisition timeout in seconds. By default, commands wait until the lock is free instead of being
+        dropped while another command (e.g., a screencap) is running; the ADB transport retains its own timeouts.
 
     Yields
     ------
@@ -49,8 +48,9 @@ def _acquire(lock):
         Raised if the lock was not acquired
 
     """
+    acquired = False
     try:
-        acquired = lock.acquire(**LOCK_KWARGS)
+        acquired = lock.acquire(timeout=-1 if timeout is None else timeout)
         if not acquired:
             raise LockNotAcquiredException
         yield acquired
