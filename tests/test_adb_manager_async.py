@@ -100,6 +100,15 @@ class TestLock(unittest.TestCase):
                 pass  # self.assertTrue(False)
 
     @awaiter
+    async def test_error_in_command_is_passed_on(self):
+        """A timeout raised by the command itself is not turned into ``LockNotAcquiredException``."""
+        lock = asyncio.Lock()
+        with self.assertRaises(TimeoutError):
+            async with _acquire(lock):
+                raise TimeoutError
+        self.assertFalse(lock.locked())
+
+    @awaiter
     async def test_fail_timeout(self):
         lock = AsyncTimedLock()
         with self.assertRaises(LockNotAcquiredException):

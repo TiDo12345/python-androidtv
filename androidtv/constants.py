@@ -684,8 +684,10 @@ DEFAULT_ADB_TIMEOUT_S = 9.0
 #: Wi-Fi connection, a single read during a transfer of several MB can take longer than :const:`DEFAULT_ADB_TIMEOUT_S`.
 DEFAULT_TRANSFER_TIMEOUT_S = 60.0
 
-#: Default timeout for acquiring the lock that protects ADB commands
-DEFAULT_LOCK_TIMEOUT_S = 3.0
+#: Default timeout (in s) for acquiring the lock that protects ADB commands.  A command waits this long for the
+#: command before it (e.g., a screencap or a file transfer) instead of being dropped right away, but it does not wait
+#: forever if the connection hangs; then :exc:`~androidtv.exceptions.LockNotAcquiredException` is raised.
+DEFAULT_LOCK_TIMEOUT_S = 60.0
 
 #: How often the power check is retried when ``dumpsys power`` replies with "Failed to write while dumping service"
 POWER_CHECK_RETRIES = 20

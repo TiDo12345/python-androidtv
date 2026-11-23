@@ -16,6 +16,7 @@ from ppadb.client import Client
 from ..constants import (
     DEFAULT_ADB_TIMEOUT_S,
     DEFAULT_AUTH_TIMEOUT_S,
+    DEFAULT_LOCK_TIMEOUT_S,
     DEFAULT_TRANSFER_TIMEOUT_S,
     DEFAULT_TRANSPORT_TIMEOUT_S,
 )
@@ -27,15 +28,16 @@ _LOGGER = logging.getLogger(__name__)
 
 @contextmanager
 def _acquire(lock, timeout=None):
-    """Queue access to a ``threading.Lock``, with an optional acquisition timeout.
+    """Queue access to a ``threading.Lock``, waiting at most ``timeout`` seconds.
 
     Parameters
     ----------
     lock : threading.Lock
         The lock that we will try to acquire
     timeout : float, None
-        Optional acquisition timeout in seconds. By default, commands wait until the lock is free instead of being
-        dropped while another command (e.g., a screencap) is running; the ADB transport retains its own timeouts.
+        The acquisition timeout in seconds; ``None`` means :const:`~androidtv.constants.DEFAULT_LOCK_TIMEOUT_S`.
+        Commands wait in order instead of being dropped while another command (e.g., a screencap) is running, but
+        not forever if the connection hangs.
 
     Yields
     ------
@@ -48,16 +50,17 @@ def _acquire(lock, timeout=None):
         Raised if the lock was not acquired
 
     """
-    acquired = False
-    try:
-        acquired = lock.acquire(timeout=-1 if timeout is None else timeout)
-        if not acquired:
-            raise LockNotAcquiredException
-        yield acquired
+    if timeout is None:
+        timeout = DEFAULT_LOCK_TIMEOUT_S
 
+    if not lock.acquire(timeout=timeout):
+        _LOGGER.warning("ADB command dropped: the connection was busy for more than %s seconds", timeout)
+        raise LockNotAcquiredException
+
+    try:
+        yield True
     finally:
-        if acquired:
-            lock.release()
+        lock.release()
 
 
 class ADBPythonSync(object):
@@ -234,6 +237,15 @@ class ADBPythonSync(object):
             return
 
         with _acquire(self._adb_lock):
+            # The connection may have been closed while this command waited for the lock
+            if not self.available:
+                _LOGGER.debug(
+                    "ADB command not sent to %s:%d because the connection was closed while it waited",
+                    self.host,
+                    self.port,
+                )
+                return
+
             _LOGGER.debug(
                 "Sending command to %s:%d via adb-shell: pull(%s, %s)", self.host, self.port, local_path, device_path
             )
@@ -267,6 +279,15 @@ class ADBPythonSync(object):
             return
 
         with _acquire(self._adb_lock):
+            # The connection may have been closed while this command waited for the lock
+            if not self.available:
+                _LOGGER.debug(
+                    "ADB command not sent to %s:%d because the connection was closed while it waited",
+                    self.host,
+                    self.port,
+                )
+                return
+
             _LOGGER.debug(
                 "Sending command to %s:%d via adb-shell: push(%s, %s)", self.host, self.port, local_path, device_path
             )
@@ -296,6 +317,15 @@ class ADBPythonSync(object):
             return None
 
         with _acquire(self._adb_lock):
+            # The connection may have been closed while this command waited for the lock
+            if not self.available:
+                _LOGGER.debug(
+                    "ADB command not sent to %s:%d because the connection was closed while it waited",
+                    self.host,
+                    self.port,
+                )
+                return None
+
             _LOGGER.debug("Taking screencap from %s:%d via adb-shell", self.host, self.port)
             return process_screencap_output(self._adb.shell("screencap -p", decode=False))
 
@@ -323,6 +353,15 @@ class ADBPythonSync(object):
             return None
 
         with _acquire(self._adb_lock):
+            # The connection may have been closed while this command waited for the lock
+            if not self.available:
+                _LOGGER.debug(
+                    "ADB command not sent to %s:%d because the connection was closed while it waited",
+                    self.host,
+                    self.port,
+                )
+                return None
+
             _LOGGER.debug("Sending command to %s:%d via adb-shell: %s", self.host, self.port, cmd)
             return self._adb.shell(cmd)
 
@@ -479,6 +518,15 @@ class ADBServerSync(object):
             return
 
         with _acquire(self._adb_lock):
+            # The connection may have been closed while this command waited for the lock
+            if not self.available:
+                _LOGGER.debug(
+                    "ADB command not sent to %s:%d because the connection was closed while it waited",
+                    self.host,
+                    self.port,
+                )
+                return
+
             _LOGGER.debug(
                 "Sending command to %s:%d via ADB server %s:%d: pull(%s, %s)",
                 self.host,
@@ -515,6 +563,15 @@ class ADBServerSync(object):
             return
 
         with _acquire(self._adb_lock):
+            # The connection may have been closed while this command waited for the lock
+            if not self.available:
+                _LOGGER.debug(
+                    "ADB command not sent to %s:%d because the connection was closed while it waited",
+                    self.host,
+                    self.port,
+                )
+                return
+
             _LOGGER.debug(
                 "Sending command to %s:%d via ADB server %s:%d: push(%s, %s)",
                 self.host,
@@ -547,6 +604,15 @@ class ADBServerSync(object):
             return None
 
         with _acquire(self._adb_lock):
+            # The connection may have been closed while this command waited for the lock
+            if not self.available:
+                _LOGGER.debug(
+                    "ADB command not sent to %s:%d because the connection was closed while it waited",
+                    self.host,
+                    self.port,
+                )
+                return None
+
             _LOGGER.debug(
                 "Taking screencap from %s:%d via ADB server %s:%d",
                 self.host,
@@ -582,6 +648,15 @@ class ADBServerSync(object):
             return None
 
         with _acquire(self._adb_lock):
+            # The connection may have been closed while this command waited for the lock
+            if not self.available:
+                _LOGGER.debug(
+                    "ADB command not sent to %s:%d because the connection was closed while it waited",
+                    self.host,
+                    self.port,
+                )
+                return None
+
             _LOGGER.debug(
                 "Sending command to %s:%d via ADB server %s:%d: %s",
                 self.host,
