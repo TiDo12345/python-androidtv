@@ -1,15 +1,20 @@
-# Standard requirements
-black==26.10.1  # pinned so that formatting does not drift between CI runs
-coverage
-coveralls
-flake8
-pylint
-pytest
-setuptools
-sphinx
-sphinx-rtd-theme
-twine
+# Development and CI requirements, pinned so that a new release of a tool cannot turn CI red on its own.
+# Dependabot proposes updates as pull requests.
 
-# Specific requirements for this project
-adb-shell[async,usb]
-aiofiles
+# Standard requirements
+black==26.10.1
+build==1.6.1
+coverage==7.17.5
+coveralls==4.1.0
+flake8==7.5.0
+pylint==4.1.4
+pytest==9.2.0
+setuptools==84.2.1
+sphinx==9.2.0
+sphinx-rtd-theme==3.1.0
+twine==7.0.0
+
+# Specific requirements for this project (the versions Home Assistant uses)
+adb-shell[async,usb]==0.4.4
+aiofiles==25.1.0
+pure-python-adb==0.3.0.dev0

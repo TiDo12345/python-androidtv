@@ -5,7 +5,15 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      github-actions:
+        patterns: ["*"]
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "weekly"
+    # Pinned tools (venv_requirements.txt) are updated; the minimum versions in pyproject.toml only when needed
+    versioning-strategy: increase-if-necessary
+    groups:
+      dev-tools:
+        patterns: ["black", "build", "coverage", "coveralls", "flake8", "pylint", "pytest", "setuptools", "sphinx*", "twine"]
