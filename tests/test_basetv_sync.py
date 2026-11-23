@@ -14,7 +14,6 @@ from androidtv.androidtv.androidtv_sync import AndroidTVSync
 from androidtv.basetv.basetv_sync import BaseTVSync
 from . import patchers
 
-
 DEVICE_PROPERTIES_OUTPUT1 = """Amazon
 AFTT
 SERIALNO
@@ -198,9 +197,11 @@ class TestBaseTVSyncPython(unittest.TestCase):
     ADB_ATTR = "_adb"
 
     def setUp(self):
-        with patchers.PATCH_ADB_DEVICE_TCP, patchers.patch_connect(True)[self.PATCH_KEY], patchers.patch_shell("")[
-            self.PATCH_KEY
-        ]:
+        with (
+            patchers.PATCH_ADB_DEVICE_TCP,
+            patchers.patch_connect(True)[self.PATCH_KEY],
+            patchers.patch_shell("")[self.PATCH_KEY],
+        ):
             self.btv = BaseTVSync("HOST", 5555)
             self.btv.adb_connect()
 

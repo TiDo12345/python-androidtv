@@ -14,7 +14,6 @@ from androidtv.adb_manager.adb_manager_sync import _acquire, ADBPythonSync, ADBS
 from androidtv.exceptions import LockNotAcquiredException
 from . import patchers
 
-
 if sys.version_info[0] == 2:
     FileNotFoundError = IOError
 
@@ -295,9 +294,11 @@ class TestADBPythonSyncWithAuthentication(unittest.TestCase):
 
     def test_connect_success_with_priv_key(self):
         """Test when the connect attempt is successful when using a private key."""
-        with patchers.patch_connect(True)[self.PATCH_KEY], patch(
-            "androidtv.adb_manager.adb_manager_sync.open", open_priv
-        ), patch("androidtv.adb_manager.adb_manager_sync.PythonRSASigner", return_value="TEST"):
+        with (
+            patchers.patch_connect(True)[self.PATCH_KEY],
+            patch("androidtv.adb_manager.adb_manager_sync.open", open_priv),
+            patch("androidtv.adb_manager.adb_manager_sync.PythonRSASigner", return_value="TEST"),
+        ):
             self.assertTrue(self.adb.connect())
             self.assertTrue(self.adb.available)
 
@@ -309,9 +310,11 @@ class TestADBPythonSyncWithAuthentication(unittest.TestCase):
 
     def test_connect_success_with_priv_pub_key(self):
         """Test when the connect attempt is successful when using private and public keys."""
-        with patchers.patch_connect(True)[self.PATCH_KEY], patch(
-            "androidtv.adb_manager.adb_manager_sync.open", open_priv_pub
-        ), patch("androidtv.adb_manager.adb_manager_sync.PythonRSASigner", return_value=None):
+        with (
+            patchers.patch_connect(True)[self.PATCH_KEY],
+            patch("androidtv.adb_manager.adb_manager_sync.open", open_priv_pub),
+            patch("androidtv.adb_manager.adb_manager_sync.PythonRSASigner", return_value=None),
+        ):
             self.assertTrue(self.adb.connect())
             self.assertTrue(self.adb.available)
 
