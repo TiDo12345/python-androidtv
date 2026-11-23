@@ -4,6 +4,7 @@ ADB Debugging must be enabled.
 """
 
 import logging
+import time
 
 from .basetv import BaseTV
 from .. import constants
@@ -377,9 +378,10 @@ class BaseTVSync(BaseTV):
         output = self._adb.shell(constants.CMD_SCREEN_ON_AWAKE_WAKE_LOCK_SIZE)
 
         # Power service might sometimes reply with "Failed to write while dumping service". If this happens,
-        # retry the request, up to three times.
-        retries_left = 20
+        # retry the request after a short pause, up to ``POWER_CHECK_RETRIES`` times.
+        retries_left = constants.POWER_CHECK_RETRIES
         while output is not None and "Failed to write while dumping service" in output and retries_left > 0:
+            time.sleep(constants.POWER_CHECK_RETRY_DELAY_S)
             output = self._adb.shell(constants.CMD_SCREEN_ON_AWAKE_WAKE_LOCK_SIZE)
             retries_left -= 1
 

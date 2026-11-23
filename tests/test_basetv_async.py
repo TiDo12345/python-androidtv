@@ -428,6 +428,19 @@ class TestBaseTVAsyncPython(unittest.TestCase):
             self.assertTupleEqual(await self.btv.screen_on_awake_wake_lock_size(), (True, True, 2))
 
     @awaiter
+    async def test_wake_lock_size_retries_exhausted(self):
+        """The power check gives up after ``POWER_CHECK_RETRIES`` retries, with a pause before each retry."""
+        with (
+            async_patchers.patch_shell("Failed to write while dumping service")[self.PATCH_KEY],
+            patch.object(self.btv._adb, "shell", wraps=self.btv._adb.shell) as shell,
+            patch("androidtv.basetv.basetv_async.asyncio.sleep") as sleep,
+        ):
+            self.assertTupleEqual(await self.btv.screen_on_awake_wake_lock_size(), (False, False, None))
+            self.assertEqual(shell.call_count, constants.POWER_CHECK_RETRIES + 1)
+            self.assertEqual(sleep.call_count, constants.POWER_CHECK_RETRIES)
+            sleep.assert_called_with(constants.POWER_CHECK_RETRY_DELAY_S)
+
+    @awaiter
     async def test_wake_lock_size(self):
         """Check that the ``wake_lock_size`` property works correctly."""
         with async_patchers.patch_shell(None)[self.PATCH_KEY]:

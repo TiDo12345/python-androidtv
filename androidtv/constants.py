@@ -686,3 +686,9 @@ DEFAULT_TRANSFER_TIMEOUT_S = 60.0
 
 #: Default timeout for acquiring the lock that protects ADB commands
 DEFAULT_LOCK_TIMEOUT_S = 3.0
+
+#: How often the power check is retried when ``dumpsys power`` replies with "Failed to write while dumping service"
+POWER_CHECK_RETRIES = 20
+
+#: Pause (in s) before each retry of the power check
+POWER_CHECK_RETRY_DELAY_S = 0.5
