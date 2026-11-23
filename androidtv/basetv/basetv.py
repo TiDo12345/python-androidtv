@@ -438,12 +438,24 @@ class BaseTV(object):  # pylint: disable=too-few-public-methods
             self.device_properties = {}
             return
 
-        lines = properties.strip().splitlines()
+        # Each property is on its own line, and an empty property is an empty line.  Do not strip the whole output,
+        # because that would also drop an empty first or last property (e.g., an empty manufacturer).
+        lines = properties.splitlines()
+        while len(lines) > 5 and not lines[-1].strip():
+            lines.pop()
+
         if len(lines) != 5:
+            _LOGGER.warning(
+                "%s:%d `get_device_properties` returned %d lines instead of 5: %s",
+                self.host,
+                self.port,
+                len(lines),
+                properties,
+            )
             self.device_properties = {}
             return
 
-        manufacturer, model, serialno, version, product_id = lines
+        manufacturer, model, serialno, version, product_id = (line.strip() for line in lines)
 
         if not serialno.strip():
             _LOGGER.warning(

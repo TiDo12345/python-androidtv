@@ -67,6 +67,19 @@ DEVICE_PROPERTIES_DICT3 = {
     "product_id": "test678",
 }
 
+# Empty manufacturer (first line) and empty product ID (last line), with CRLF line endings
+DEVICE_PROPERTIES_OUTPUT_EMPTY_FIRST_LAST = "\r\nAFTT\r\nSERIALNO\r\n5.1.1\r\n\r\n"
+
+DEVICE_PROPERTIES_DICT_EMPTY_FIRST_LAST = {
+    "manufacturer": "",
+    "model": "AFTT",
+    "serialno": "SERIALNO",
+    "sw_version": "5.1.1",
+    "wifimac": "ab:cd:ef:gh:ij:kl",
+    "ethmac": None,
+    "product_id": "",
+}
+
 
 # Source: https://community.home-assistant.io/t/new-chromecast-w-android-tv-integration-only-showing-as-off-or-idle/234424/15
 DEVICE_PROPERTIES_GOOGLE_TV = """Google
@@ -585,6 +598,22 @@ class TestBaseTVSyncPython(unittest.TestCase):
         ):
             device_properties = self.btv.get_device_properties()
             self.assertDictEqual(DEVICE_PROPERTIES_DICT3, device_properties)
+
+        with patch.object(
+            self.btv._adb,
+            "shell",
+            side_effect=(DEVICE_PROPERTIES_OUTPUT_EMPTY_FIRST_LAST, ETHMAC_OUTPUT1, WIFIMAC_OUTPUT1),
+        ):
+            device_properties = self.btv.get_device_properties()
+            self.assertDictEqual(DEVICE_PROPERTIES_DICT_EMPTY_FIRST_LAST, device_properties)
+
+        with patch.object(
+            self.btv._adb,
+            "shell",
+            side_effect=(DEVICE_PROPERTIES_OUTPUT1 + "\n\n", ETHMAC_OUTPUT1, WIFIMAC_OUTPUT1),
+        ):
+            device_properties = self.btv.get_device_properties()
+            self.assertDictEqual(DEVICE_PROPERTIES_DICT1, device_properties)
 
         with patch.object(self.btv._adb, "shell", side_effect=("manufacturer", None, "No match")):
             device_properties = self.btv.get_device_properties()
