@@ -135,7 +135,7 @@ class BaseTV(object):  # pylint: disable=too-few-public-methods
             return self._custom_commands[constants.CUSTOM_AUDIO_STATE]
 
         # Is this an Android 11-14 device?
-        if self.DEVICE_ENUM == constants.DeviceEnum.ANDROIDTV and self.device_properties.get("sw_version", "") in [
+        if self.device_properties.get("sw_version", "") in [
             "11",
             "12",
             "13",
@@ -174,15 +174,15 @@ class BaseTV(object):  # pylint: disable=too-few-public-methods
             return constants.CMD_CURRENT_APP_ASKEY_STI6130
 
         # Is this an Android 11 device?
-        if self.DEVICE_ENUM == constants.DeviceEnum.ANDROIDTV and self.device_properties.get("sw_version", "") == "11":
+        if self.device_properties.get("sw_version", "") == "11":
             return constants.CMD_CURRENT_APP11
 
         # Is this an Android 12 device?
-        if self.DEVICE_ENUM == constants.DeviceEnum.ANDROIDTV and self.device_properties.get("sw_version", "") == "12":
+        if self.device_properties.get("sw_version", "") == "12":
             return constants.CMD_CURRENT_APP12
 
         # Is this an Android 13/14 device?
-        if self.DEVICE_ENUM == constants.DeviceEnum.ANDROIDTV and self.device_properties.get("sw_version", "") in [
+        if self.device_properties.get("sw_version", "") in [
             "13",
             "14",
         ]:
@@ -219,15 +219,15 @@ class BaseTV(object):  # pylint: disable=too-few-public-methods
             return constants.CMD_CURRENT_APP_MEDIA_SESSION_STATE_GOOGLE_TV
 
         # Is this an Android 11 device?
-        if self.DEVICE_ENUM == constants.DeviceEnum.ANDROIDTV and self.device_properties.get("sw_version", "") == "11":
+        if self.device_properties.get("sw_version", "") == "11":
             return constants.CMD_CURRENT_APP_MEDIA_SESSION_STATE11
 
         # Is this an Android 12 device?
-        if self.DEVICE_ENUM == constants.DeviceEnum.ANDROIDTV and self.device_properties.get("sw_version", "") == "12":
+        if self.device_properties.get("sw_version", "") == "12":
             return constants.CMD_CURRENT_APP_MEDIA_SESSION_STATE12
 
         # Is this an Android 13/14 device?
-        if self.DEVICE_ENUM == constants.DeviceEnum.ANDROIDTV and self.device_properties.get("sw_version", "") in [
+        if self.device_properties.get("sw_version", "") in [
             "13",
             "14",
         ]:
@@ -248,7 +248,7 @@ class BaseTV(object):  # pylint: disable=too-few-public-methods
             return self._custom_commands[constants.CUSTOM_HDMI_INPUT]
 
         # Is this an Android 11-14 device?
-        if self.DEVICE_ENUM == constants.DeviceEnum.ANDROIDTV and self.device_properties.get("sw_version", "") in [
+        if self.device_properties.get("sw_version", "") in [
             "11",
             "12",
             "13",
@@ -273,7 +273,7 @@ class BaseTV(object):  # pylint: disable=too-few-public-methods
 
         """
         # Is this an Android 11-14 device?
-        if self.DEVICE_ENUM == constants.DeviceEnum.ANDROIDTV and self.device_properties.get("sw_version", "") in [
+        if self.device_properties.get("sw_version", "") in [
             "11",
             "12",
             "13",
@@ -309,18 +309,22 @@ class BaseTV(object):  # pylint: disable=too-few-public-methods
             return constants.CMD_LAUNCH_APP_GOOGLE_TV.format(app)
 
         if self.DEVICE_ENUM == constants.DeviceEnum.FIRETV:
+            # Is this a Fire OS 8 (Android 11) device?
+            if self.device_properties.get("sw_version", "") == "11":
+                return constants.CMD_LAUNCH_APP11_FIRETV.format(app)
+
             return constants.CMD_LAUNCH_APP_FIRETV.format(app)
 
         # Is this an Android 11 device?
-        if self.DEVICE_ENUM == constants.DeviceEnum.ANDROIDTV and self.device_properties.get("sw_version", "") == "11":
+        if self.device_properties.get("sw_version", "") == "11":
             return constants.CMD_LAUNCH_APP11.format(app)
 
         # Is this an Android 12 device?
-        if self.DEVICE_ENUM == constants.DeviceEnum.ANDROIDTV and self.device_properties.get("sw_version", "") == "12":
+        if self.device_properties.get("sw_version", "") == "12":
             return constants.CMD_LAUNCH_APP12.format(app)
 
         # Is this an Android 13-14 device?
-        if self.DEVICE_ENUM == constants.DeviceEnum.ANDROIDTV and self.device_properties.get("sw_version", "") in [
+        if self.device_properties.get("sw_version", "") in [
             "13",
             "14",
         ]:

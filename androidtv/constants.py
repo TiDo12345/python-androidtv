@@ -186,6 +186,11 @@ CMD_LAUNCH_APP_FIRETV = (
     CMD_DEFINE_CURRENT_APP_VARIABLE.replace("{", "{{").replace("}", "}}") + " && " + CMD_LAUNCH_APP_CONDITION_FIRETV
 )
 
+#: Launch an app on a Fire OS 8 (Android 11) device
+CMD_LAUNCH_APP11_FIRETV = (
+    CMD_DEFINE_CURRENT_APP_VARIABLE11.replace("{", "{{").replace("}", "}}") + " && " + CMD_LAUNCH_APP_CONDITION_FIRETV
+)
+
 #: Launch an app on a Google TV device
 CMD_LAUNCH_APP_GOOGLE_TV = (
     CMD_DEFINE_CURRENT_APP_VARIABLE_GOOGLE_TV.replace("{", "{{").replace("}", "}}") + " && " + CMD_LAUNCH_APP_CONDITION
