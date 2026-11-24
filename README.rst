@@ -24,6 +24,7 @@ Changes compared to ``androidtv`` 0.0.75:
 * discard ``dumpsys`` stderr so that "Broken pipe" does not corrupt the parsed state (upstream pull request `#376 <https://github.com/JeffLIrion/python-androidtv/pull/376>`_ by JordiRubio93, issue `#373 <https://github.com/JeffLIrion/python-androidtv/issues/373>`_)
 * retry the power check up to 20 times, with a short pause, when ``dumpsys power`` fails (upstream pull request `#367 <https://github.com/JeffLIrion/python-androidtv/pull/367>`_ by matejdro)
 * check whether the screen is on with ``dumpsys deviceidle get screen`` first, then the previous checks (upstream pull request `#369 <https://github.com/JeffLIrion/python-androidtv/pull/369>`_ by tgrushka; checked on a Fire OS 7 (Android 9) TV)
+* Fire OS 8 (Android 11): Fire TV devices now use the Android 11 commands for the current app, the media session state, launching apps, the audio state, the volume and the HDMI input, so that the state is no longer stuck at "idle" (upstream issue `#372 <https://github.com/JeffLIrion/python-androidtv/issues/372>`_; checked on a Fire TV Stick 4K Max and Fire HD 10 tablets with Fire OS 8 and a Fire TV Cube with Fire OS 7)
 * device properties are no longer discarded when the manufacturer or product ID is empty (same problem as upstream pull request `#359 <https://github.com/JeffLIrion/python-androidtv/pull/359>`_ by clansty)
 * no Python 2 compatibility code and no direct ``async_timeout`` dependency any more; requires ``adb-shell`` 0.4.4+
 * packaging with ``pyproject.toml`` (version defined only in ``androidtv/__init__.py``); hardened CI (read-only token, GitHub Actions pinned to commit SHAs, pinned tools, weekly run), Dependabot, CodeQL and secret scanning
@@ -32,7 +33,7 @@ Changes compared to ``androidtv`` 0.0.75:
 Installation
 ------------
 
-There is no PyPI release of this fork.  The version carries a local label (currently ``0.0.75+tido.6``), so it still satisfies a requirement of ``androidtv==0.0.75``, such as the one in Home Assistant.
+There is no PyPI release of this fork.  The version carries a local label (currently ``0.0.75+tido.7``), so it still satisfies a requirement of ``androidtv==0.0.75``, such as the one in Home Assistant.
 
 Install a release (recommended, a fixed version) with the wheel URL from the `releases page <https://github.com/TiDo12345/python-androidtv/releases>`_:
 
