@@ -27,7 +27,7 @@ Changes compared to ``androidtv`` 0.0.75:
 * Fire OS 8 (Android 11): Fire TV devices now use the Android 11 commands for the current app, the media session state, launching apps, the audio state, the volume and the HDMI input, so that the state is no longer stuck at "idle" (upstream issue `#372 <https://github.com/JeffLIrion/python-androidtv/issues/372>`_; checked on a Fire TV Stick 4K Max and Fire HD 10 tablets with Fire OS 8 and a Fire TV Cube with Fire OS 7)
 * device properties are no longer discarded when the manufacturer or product ID is empty (same problem as upstream pull request `#359 <https://github.com/JeffLIrion/python-androidtv/pull/359>`_ by clansty)
 * no Python 2 compatibility code and no direct ``async_timeout`` dependency any more; requires ``adb-shell`` 0.4.4+
-* packaging with ``pyproject.toml`` (version defined only in ``androidtv/__init__.py``); hardened CI (read-only token, GitHub Actions pinned to commit SHAs, pinned tools, weekly run), Dependabot, CodeQL and secret scanning
+* packaging with ``pyproject.toml`` (version defined only in ``androidtv/__init__.py``); hardened CI (read-only token, GitHub Actions pinned to commit SHAs, pinned tools, weekly run), Dependabot, CodeQL and secret scanning; ``master`` and the release tags are protected by rulesets, releases are immutable and carry a build provenance attestation
 
 
 Installation
@@ -40,6 +40,12 @@ Install a release (recommended, a fixed version) with the wheel URL from the `re
 .. code-block::
 
    pip install "androidtv[async] @ https://github.com/TiDo12345/python-androidtv/releases/download/<tag>/<wheel>"
+
+Releases are immutable once published.  From ``v0.0.75+tido.8`` on, the wheel and sdist carry a build provenance attestation; check a downloaded file with:
+
+.. code-block::
+
+   gh attestation verify <wheel> --repo TiDo12345/python-androidtv
 
 or the current ``master`` branch:
 
