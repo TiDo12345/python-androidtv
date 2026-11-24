@@ -180,6 +180,12 @@ class TestConstants(unittest.TestCase):
             r"CURRENT_APP=$(dumpsys window windows | grep -E 'mInputMethod(Input)?Target') && CURRENT_APP=${{CURRENT_APP%%/*}} && CURRENT_APP=${{CURRENT_APP##* }} && if [ $CURRENT_APP != '{0}' ]; then monkey -p {0} -c android.intent.category.LEANBACK_LAUNCHER --pct-syskeys 0 1; fi",
         )
 
+        # CMD_LAUNCH_APP11_FIRETV
+        self.assertCommand(
+            constants.CMD_LAUNCH_APP11_FIRETV,
+            r"CURRENT_APP=$(dumpsys window windows | grep -E 'mInputMethod(Input)?Target') && CURRENT_APP=${{CURRENT_APP%%/*}} && CURRENT_APP=${{CURRENT_APP##* }} && if [ $CURRENT_APP != '{0}' ]; then monkey -p {0} -c android.intent.category.LAUNCHER --pct-syskeys 0 1; fi",
+        )
+
         # CMD_LAUNCH_APP12
         self.assertCommand(
             constants.CMD_LAUNCH_APP12,
@@ -307,6 +313,15 @@ class TestConstants(unittest.TestCase):
         current_app = self._parse_current_app(dumpsys_output)
 
         self.assertEqual(current_app, constants.APP_ATV_LAUNCHER)
+
+    def test_current_app_extraction_fire_os_8(self):
+        """Fire OS 8 (Android 11): the legacy lines are missing, the Android 11 command finds the app."""
+        dumpsys_output = "  mInputMethodInputTarget in display# 0 Window{cb9b4dd u0 com.amazon.tv.launcher/com.amazon.tv.launcher.ui.HomeActivity_vNext}"
+        current_app = self._exec(
+            'CURRENT_APP="' + dumpsys_output + '" && ' + constants.CMD_PARSE_CURRENT_APP11 + " && echo $CURRENT_APP"
+        )
+
+        self.assertEqual(current_app, constants.APP_FIRETV_PACKAGE_LAUNCHER)
 
     def test_current_app_extraction_atv_launcher_google_tv(self):
         dumpsys_output = """

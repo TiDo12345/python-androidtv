@@ -12,6 +12,7 @@ sys.path.insert(0, "..")
 from androidtv import constants, ha_state_detection_rules_validator
 from androidtv.androidtv.androidtv_sync import AndroidTVSync
 from androidtv.basetv.basetv_sync import BaseTVSync
+from androidtv.firetv.firetv_sync import FireTVSync
 from . import patchers
 
 
@@ -162,6 +163,33 @@ DEVICE_PROPERTIES_DICT_SHIELD_TV_13 = {
     "wifimac": "11:22:33:44:55:66",
     "ethmac": "ab:cd:ef:gh:ij:kl",
     "product_id": "nvshield13",
+}
+
+DEVICE_PROPERTIES_OUTPUT_FIRE_OS_8 = """Amazon
+AFTKRT
+G0123456789ABCDE
+11
+karat
+"""
+
+DEVICE_PROPERTIES_OUTPUT_FIRE_OS_7 = """Amazon
+AFTR
+G0123456789ABCDE
+9
+raven
+"""
+
+WIFIMAC_FIRE_OS_8 = "    link/ether 11:22:33:44:55:66 brd ff:ff:ff:ff:ff:ff"
+ETHMAC_FIRE_OS_8 = 'Device "eth0" does not exist.'
+
+DEVICE_PROPERTIES_DICT_FIRE_OS_8 = {
+    "manufacturer": "Amazon",
+    "model": "AFTKRT",
+    "serialno": "G0123456789ABCDE",
+    "sw_version": "11",
+    "wifimac": "11:22:33:44:55:66",
+    "ethmac": None,
+    "product_id": "karat",
 }
 
 INSTALLED_APPS_OUTPUT_1 = """package:org.example.app
@@ -723,6 +751,45 @@ class TestBaseTVSyncPython(unittest.TestCase):
                 self.btv._cmd_launch_app("TEST"),
                 constants.CMD_LAUNCH_APP13.format("TEST"),
             )
+
+        # Fire OS 8 (Android 11), e.g. a Fire TV Stick 4K Max (2nd gen):
+        # https://github.com/JeffLIrion/python-androidtv/issues/372
+        with patch.object(
+            self.btv._adb,
+            "shell",
+            side_effect=(DEVICE_PROPERTIES_OUTPUT_FIRE_OS_8, ETHMAC_FIRE_OS_8, WIFIMAC_FIRE_OS_8),
+        ):
+            self.btv = FireTVSync.from_base(self.btv)
+            device_properties = self.btv.get_device_properties()
+            assert self.btv.DEVICE_ENUM == constants.DeviceEnum.FIRETV
+            self.assertDictEqual(DEVICE_PROPERTIES_DICT_FIRE_OS_8, device_properties)
+            self.assertEqual(self.btv._cmd_audio_state(), constants.CMD_AUDIO_STATE11)
+            self.assertEqual(self.btv._cmd_volume_set(5), constants.CMD_VOLUME_SET_COMMAND11.format(5))
+            self.assertEqual(self.btv._cmd_current_app(), constants.CMD_CURRENT_APP11)
+            self.assertEqual(
+                self.btv._cmd_current_app_media_session_state(),
+                constants.CMD_CURRENT_APP_MEDIA_SESSION_STATE11,
+            )
+            self.assertEqual(self.btv._cmd_hdmi_input(), constants.CMD_HDMI_INPUT11)
+            self.assertEqual(self.btv._cmd_launch_app("TEST"), constants.CMD_LAUNCH_APP11_FIRETV.format("TEST"))
+
+        # Fire OS 7 (Android 9) keeps the legacy commands
+        with patch.object(
+            self.btv._adb,
+            "shell",
+            side_effect=(DEVICE_PROPERTIES_OUTPUT_FIRE_OS_7, ETHMAC_FIRE_OS_8, WIFIMAC_FIRE_OS_8),
+        ):
+            self.btv.get_device_properties()
+            assert self.btv.device_properties.get("sw_version", "") == "9"
+            self.assertEqual(self.btv._cmd_audio_state(), constants.CMD_AUDIO_STATE)
+            self.assertEqual(self.btv._cmd_volume_set(5), constants.CMD_VOLUME_SET_COMMAND.format(5))
+            self.assertEqual(self.btv._cmd_current_app(), constants.CMD_CURRENT_APP)
+            self.assertEqual(
+                self.btv._cmd_current_app_media_session_state(),
+                constants.CMD_CURRENT_APP_MEDIA_SESSION_STATE,
+            )
+            self.assertEqual(self.btv._cmd_hdmi_input(), constants.CMD_HDMI_INPUT)
+            self.assertEqual(self.btv._cmd_launch_app("TEST"), constants.CMD_LAUNCH_APP_FIRETV.format("TEST"))
 
     def test_get_installed_apps(self):
         """ "Check that `get_installed_apps` works correctly."""
