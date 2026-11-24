@@ -106,7 +106,72 @@ Assuming the address of the ADB server is 192.168.0.101, your Home Assistant con
 1c) Linux Service
 *****************
 
-TODO
+If Home Assistant runs directly on a Linux machine, you can run the ADB server on the same machine as a systemd service.  First install ``adb`` (on Debian / Ubuntu: ``sudo apt install adb``) and create a user for the service:
+
+.. code-block:: sh
+
+   sudo useradd --system --create-home --home-dir /var/lib/adb adb
+
+The ADB server reads its key from ``~/.android/adbkey`` of the user it runs as, so the key lives in ``/var/lib/adb/.android``.  If you already have an authorized key, copy it there; otherwise the server creates one when it first starts and you must accept the connection on the device.
+
+The first unit runs the ADB server and restarts it if it stops:
+
+.. code-block:: ini
+   :caption: **/etc/systemd/system/adb-server.service**
+
+   [Unit]
+   Description=ADB server
+   After=network-online.target
+   Wants=network-online.target
+
+   [Service]
+   User=adb
+   Environment=HOME=/var/lib/adb
+   ExecStart=/usr/bin/adb server nodaemon
+   Restart=always
+   RestartSec=10
+
+   [Install]
+   WantedBy=multi-user.target
+
+Since Home Assistant cannot start the connection to the device itself, a second unit connects the ADB server to your devices, and a timer repeats this every minute so that the connection comes back after a device reboots:
+
+.. code-block:: ini
+   :caption: **/etc/systemd/system/adb-connect.service**
+
+   [Unit]
+   Description=Connect the ADB server to the Android TV / Fire TV devices
+   Requires=adb-server.service
+   After=adb-server.service
+
+   [Service]
+   Type=oneshot
+   User=adb
+   Environment=HOME=/var/lib/adb
+   ExecStart=-/usr/bin/adb connect 192.168.0.111
+   ExecStart=-/usr/bin/adb connect 192.168.0.222
+
+.. code-block:: ini
+   :caption: **/etc/systemd/system/adb-connect.timer**
+
+   [Unit]
+   Description=Reconnect the ADB server to the devices every minute
+
+   [Timer]
+   OnActiveSec=10
+   OnUnitActiveSec=60
+
+   [Install]
+   WantedBy=timers.target
+
+Enable and start both:
+
+.. code-block:: sh
+
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now adb-server.service adb-connect.timer
+
+Check the connection with ``sudo -u adb HOME=/var/lib/adb adb devices``; each device should be listed as ``device`` (not ``unauthorized`` or ``offline``).  Because the devices must be connected before Home Assistant starts (see the note above), you can add ``After=adb-connect.service`` and ``Wants=adb-connect.service`` to the ``[Unit]`` section of your Home Assistant service.
 
 Your Home Assistant configuration will look like:
 
